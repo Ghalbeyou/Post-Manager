@@ -1,6 +1,6 @@
 <!-- create a cool readme for post manager open source project! -->
 # Post Manager
-A simple post manager for your blog. this project is open source and you can use it for free. this project is made by [@ghalbeyou] and its made in [Python] language.
+A simple post manager for your blog. this project is open source and you can use it for free. this project is made by [@ghalbeyou](https://github.com/Ghalbeyou/) and its made in [Python](https://github.com/python) language.
 
 ## Features
 - simple
@@ -30,4 +30,4 @@ License for this project is [APPACHE] license.
 - - don't copy and paste the code
 
 ## Contact
-- if you have any question, you can contact me at [@ghalbeyou] ! I hope this project will be useful for you.
+- if you have any question, you can contact me at [@ghalbeyou](https://github.com/Ghalbeyou/) ! I hope this project will be useful for you.
