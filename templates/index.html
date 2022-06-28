@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<title>Home</title>
+<h1>Home page of <b>Post Manager</b></h1>
+    <a href="/dashboard">Dashboard</a>
+    <p>This is a Post manager site for you to send your posts.</p>
+    <br/>
+    <p>Posts</p>
+    <ul>
+    {% if posts %}
+        {% for post in posts %}
+            <li><a href="/post/{{ post.id }}">{{ post.title }}</a></li>
+        {% endfor %}
+    {% else %}
+        <li>No posts found</li>
+    {% endif %} 
+    </ul>
+    <br/>
+    <p>Users</p>
+    <ul>
+    {% for user in users %}
+        <li><a href="/posts/{{ user.username }}">{{ user.username }}</a></li>
+    {% endfor %}
+    </ul>
+    <a href="/send_yours">Send your own post here!</a>
+
+    <br/>
+    <p>Contact => <a href="/contact">Contact</a></p>
