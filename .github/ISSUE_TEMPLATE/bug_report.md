@@ -10,8 +10,8 @@ assignees: ''
 **Describe the bug**
 A clear and concise description of what the bug is.
 
-**To Reproduce**
-When a bug happens, it will printed on console, copy it and send it here!
+**Error**
+copy the error that is in the console and paste it here!
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
@@ -19,4 +19,4 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Additional context**
-If you modifed the app and got a error, thats not bug from the app!
+tell more

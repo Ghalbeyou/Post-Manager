@@ -7,4 +7,4 @@ assignees: ''
 
 ---
 
-You can send idea for anythink! just please, don't use othersideas.
+You can send idea for anythink! just please, don't use others ideas.
