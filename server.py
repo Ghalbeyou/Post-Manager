@@ -1,3 +1,7 @@
+# this is a flask server that uses sessions and json files to store data and load.
+# it can be customized but
+# if there was bugs, feel free to fork and fix them.
+# this project cannot used for personal uses.
 from hashlib import md5
 import json
 import flask
@@ -122,6 +126,12 @@ def register_post():
     for i in illegal:
         if i in flask.request.form['username']:
             return '<p>Username cannot contain spaces or illegal characters!</p>' + '<br/><a href="/">Home</a>'
+    if flask.request.form['username'] == '':
+        return '<p>Username cannot be empty!</p>' + '<br/><a href="/">Home</a>'
+    if flask.request.form['password'] == '':
+        return '<p>Password cannot be empty!</p>' + '<br/><a href="/">Home</a>'
+    if "<" in flask.request.form['password'] or ">" in flask.request.form['password']:
+        return '<p>Password cannot contain < or >!</p>' + '<br/><a href="/">Home</a>'
     for user in users:
         if user['username'] == flask.request.form['username']:
             return '<p>Username already exists!</p>' + '<br/><a href="/">Home</a>'
@@ -132,4 +142,4 @@ def register_post():
     with open('users.json', 'w') as f:
         json.dump(users, f)
     return '<p>You have been registered!</p>' + '<br/><a href="/">Home</a>'
-app.run(debug=True)
+app.run(debug=False)
