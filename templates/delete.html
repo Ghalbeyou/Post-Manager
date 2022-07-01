@@ -4,12 +4,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.css') }}"/>
-    <title>{{ post.title }} - Post Manager</title>
+    <title>Delete Post</title>
 </head>
 <body class="container">
-    <h1>Title: {{ post.title }}</h1>
-    <p>Content: {{ post.content }}</p>
-    <p>Author: <a href="/posts/{{ post.author }}">{{ post.author }}</a></p>
-    <a href="/report/{{ post.id }}" class="btn btn-outline-danger">Report this post!</a>
+    <h1>Delete post</h1>
+    {% for post in posts %}
+    <!-- find the author name in the list-->
+    {% if post.author == user %}
+        <a class="btn btn-outline-primary" href="/delete/{{ post.id }}">{{ post.title }}</a><br/>
+    {% endif %}
+    {% endfor %}
 </body>
 </html>

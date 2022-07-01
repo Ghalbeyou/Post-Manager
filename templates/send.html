@@ -3,16 +3,17 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.css') }}"/>
     <title>Send your own post!</title>
 </head>
-<body>
+<body class="container">
     <h1>send your own post</h1>
-    <form action="/send" method="post">
+    <form class="form-group" action="/send" method="post">
         <label for="title">Title:</label><br/>
-        <input required type="text" name="title" id="title"><br/>
+        <input required class="form-control" type="text" name="title" id="title"><br/>
         <label for="content">Content:</label><br/>
-        <textarea required name="content" id="content" cols="30" rows="10"></textarea><br/>
+        <textarea required class="form-control" name="content" id="content" cols="30" rows="10"></textarea><br/>
         <label>You are sending this post as {{ author }}!</label><br/>
-        <input type="submit" value="Send">
+        <input class="btn btn-outline-primary" type="submit" value="Send">
 </body>
 </html>

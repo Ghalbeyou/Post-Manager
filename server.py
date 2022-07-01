@@ -5,7 +5,8 @@
 from hashlib import md5
 import json
 import flask
-
+with open('config.json') as f:
+    config = json.load(f)
 app = flask.Flask(__name__)
 app.secret_key = 'b<9rdX$us[qf@6!pc~-4~W/_(OEa0@21?2tmD2txz07<+=^Qnl|8.88T[KoK(P+'
 app.config['SESSION_TYPE'] = 'filesystem'
@@ -16,17 +17,16 @@ with open('users.json') as f:
 
 @app.route('/')
 def index():
+    print("index sawed!")
     return flask.render_template('index.html', posts=posts, users=users) + '<br/><a href="/">Home</a>'
-@app.route('/contact')
-def contact():
-    return 'Contact us!<br/><a href="/">Home</a>'
 @app.route('/send_yours')
 def send_yours():
+    print("send_yours sawed!")
     # check if the user is logged in
     if flask.session.get('logged_in'):
         return flask.render_template('send.html', author=flask.session['username']) + '<br/><a href="/">Home</a>'
     else:
-        return '<p>You need to <a href="/login">login</a> first.</p>' + '<br/><a href="/">Home</a>'
+        return flask.render_template('access_de.html')
 @app.route('/send', methods=['POST'])
 def send_yours_post():
     ids = 0
@@ -37,7 +37,7 @@ def send_yours_post():
     posts.append({'id': ids,'title': title, 'content': content, 'author': flask.session['username']})
     with open('posts.json', 'w') as f:
         json.dump(posts, f)
-    return '<p>Your post has been sent!</p>'
+    return '<p>Your post has been sent!</p>'  + "<br/><a href='/'>Home</a>"
 @app.route('/api/posts')
 def api_posts():
     return flask.jsonify(posts)
@@ -60,7 +60,13 @@ def api_send(title, content, author):
     return '<p>Your post has been sent!</p>' + '<br/><a href="/">Home</a>'
 @app.route('/post/<int:id>')
 def post(id):
-    return flask.render_template('post.html', post=posts[id]) + '<br/><a href="/">Home</a>'
+    _ = id-1
+    # do a simple try
+    try:
+        return flask.render_template('post.html', post=posts[_]) + '<br/><a href="/">Home</a>'
+    except:
+        return "<p>Post not found</p>" + '<br/><a href="/">Home</a>'
+
 @app.route('/posts/<string:author>')
 def posts_by_author(author):
     return flask.render_template('posts.html', posts=posts, author=author)  + '<br/><a href="/">Home</a>'
@@ -82,7 +88,7 @@ def dashboard():
     if flask.session.get('logged_in'):
         return flask.render_template('dash.html', username=flask.session['username']) + '<br/><a href="/">Home</a>'
     else:
-        return '<p>You need to <a href="/login">login</a> first.</p>' + '<br/><a href="/">Home</a>'
+        return flask.render_template('access_de.html')
 @app.route('/logout')
 def logout():
     if flask.session.get('logged_in'):
@@ -142,4 +148,84 @@ def register_post():
     with open('users.json', 'w') as f:
         json.dump(users, f)
     return '<p>You have been registered!</p>' + '<br/><a href="/">Home</a>'
-app.run(debug=False)
+@app.route('/delete')
+def delete():
+    if flask.session.get('logged_in'):
+        if flask.session.get('username') == 'admin':
+            return 'Delete any post you want!'
+        return flask.render_template('delete.html', user=flask.session.get('username'), posts=posts)
+@app.route('/delete/<int:id>')
+def delete_post(id):
+    if flask.session.get('username') == 'admin':
+        posts.pop(id)
+        return 'Done!'
+    for post in posts:
+        if post["id"] == id:
+            if post["author"] == flask.session.get('username'):
+                # remove the giving id from array
+
+                posts.pop(id)
+                with open('posts.json', 'w') as f:
+                    json.dump(posts, f)
+                return "<p> deleted!</p>" + "<br/><a href='/'>Home</a>"
+            else:
+                return "<p>You are not the owner of that post!</p>" + '<br/><a href="/">Home</a>'
+        else:
+            return "<p>Post don't exist.</p>" + '<br/><a href="/">Home</a>'
+@app.route('/report/<int:id>')
+def report(id):
+    if flask.session.get('logged_in'):
+        return flask.render_template('report_.html', id=id) + '<br/><a href="/">Home</a>'
+    else:
+        return flask.render_template('access_de.html')
+@app.route('/report')
+def report_post():
+    if flask.session.get('logged_in'):
+        return flask.render_template('report.html', posts=posts) + '<br/><a href="/">Home</a>'
+    else:
+        return flask.render_template('access_de.html')
+@app.route('/report', methods=['POST'])
+def report_post_post():
+    if flask.session.get('logged_in'):
+        for post in posts:
+            if post["id"] == int(flask.request.form['post_id']):
+                return "<p> reported!</p>" + "<br/><a href='/'>Home</a>"
+        return "<p>Post don't exist.</p>" + '<br/><a href="/">Home</a>'
+    else:
+        return flask.render_template('access_de.html')
+@app.route('/reportuser/<string:id>')
+def reportuser(id):
+    if flask.session.get('logged_in'):
+        return flask.render_template('reportuser_.html', user=id) + '<br/><a href="/">Home</a>'
+    else:
+        return flask.render_template('access_de.html')
+@app.route('/reportuser')
+def reportuser_post():
+    if flask.session.get('logged_in'):
+        return flask.render_template('reportuser.html') + '<br/><a href="/">Home</a>'
+    else:
+        return flask.render_template('access_de.html')
+@app.route('/reportuser', methods=['POST'])
+
+def reportuser_post_post():
+    if flask.session.get('logged_in'):
+        for user in users:
+            if user['username'] == flask.request.form['username']:
+                return "<p> reported!</p>" + "<br/><a href='/'>Home</a>"
+        return "<p>User don't exist.</p>" + '<br/><a href="/">Home</a>'
+    else:
+        return flask.render_template('access_de.html')
+@app.errorhandler(404)
+def notfound(a):
+    return flask.render_template('404.html')
+@app.errorhandler(500)
+def internalerror(a):
+    return flask.render_template('500.html')
+@app.errorhandler(403)
+def forbidden(a):
+    return flask.render_template('403.html')
+@app.errorhandler(405)
+def methodnotallowed(a):
+    return flask.render_template('405.html')
+from waitress import serve
+serve(app, host="0.0.0.0", port=config["port"])

@@ -1,27 +1,30 @@
 <!DOCTYPE html>
 <title>Home</title>
+
+<link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.css') }}"/>
+<div class="container">
 <h1>Home page of <b>Post Manager</b></h1>
-    <a href="/dashboard">Dashboard</a>
+    <a class="btn btn-outline-danger" href="/dashboard">Dashboard</a>
     <p>This is a Post manager site for you to send your posts.</p>
     <br/>
     <p>Posts</p>
-    <ul>
+    <ul class="py-2">
     {% if posts %}
         {% for post in posts %}
-            <li><a href="/post/{{ post.id }}">{{ post.title }}</a></li>
+            <a class="btn btn-outline-primary sm" href="/post/{{ post.id+1 }}">{{ post.title }}</a><br/>
         {% endfor %}
     {% else %}
-        <li>No posts found</li>
+        <p class="text-danger">No posts found</p>
     {% endif %} 
     </ul>
     <br/>
     <p>Users</p>
     <ul>
     {% for user in users %}
-        <li><a href="/posts/{{ user.username }}">{{ user.username }}</a></li>
+        <a class="btn btn-outline-warning" href="/posts/{{ user.username }}">{{ user.username }}</a>
+        <br/>
     {% endfor %}
     </ul>
-    <a href="/send_yours">Send your own post here!</a>
+    <a class="text-muted" href="/send_yours">Send your own post here!</a>
 
     <br/>
-    <p>Contact => <a href="/contact">Contact</a></p>
