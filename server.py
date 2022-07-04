@@ -17,11 +17,9 @@ with open('users.json') as f:
 
 @app.route('/')
 def index():
-    print("index sawed!")
-    return flask.render_template('index.html', posts=posts, users=users) + '<br/><a href="/">Home</a>'
+    return flask.render_template('index.html', posts=posts, users=users, post_len=len(posts), user_len=len(users)) + '<br/><a href="/">Home</a>'
 @app.route('/send_yours')
 def send_yours():
-    print("send_yours sawed!")
     # check if the user is logged in
     if flask.session.get('logged_in'):
         return flask.render_template('send.html', author=flask.session['username']) + '<br/><a href="/">Home</a>'
@@ -72,6 +70,8 @@ def posts_by_author(author):
     return flask.render_template('posts.html', posts=posts, author=author)  + '<br/><a href="/">Home</a>'
 @app.route('/login')
 def login():
+    if len(users) < 1:
+        return "<p>No Users found!</p>"
     return flask.render_template('login.html') + '<br/><a href="/">Home</a>'
 @app.route('/login', methods=['POST'])
 def login_post():
@@ -227,5 +227,4 @@ def forbidden(a):
 @app.errorhandler(405)
 def methodnotallowed(a):
     return flask.render_template('405.html')
-from waitress import serve
-serve(app, host="0.0.0.0", port=config["port"])
+app.run(debug=config["debug"], port=config["port"])

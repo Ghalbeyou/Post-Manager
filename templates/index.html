@@ -20,10 +20,16 @@
     <br/>
     <p>Users</p>
     <ul>
-    {% for user in users %}
+        {% if users %}
+        {% for user in users %}
         <a class="btn btn-outline-warning" href="/posts/{{ user.username }}">{{ user.username }}</a>
         <br/>
-    {% endfor %}
+        
+        {% endfor %}
+        {% else %}
+        <p class="text-danger">No Users</p>
+        <br/>
+        {% endif %}
     </ul>
     <a class="text-muted" href="/send_yours">Send your own post here!</a>
 
